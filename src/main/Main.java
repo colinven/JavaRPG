@@ -12,14 +12,14 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Java RPG");
 
-        GamePanel gamePanel = new GamePanel();  //implements screen/tile sizing, looping functionality
+        GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
 
         window.pack();
 
-        window.setLocationRelativeTo(null); //centers window
+        window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        gamePanel.startGameThread(); //start loop
+        gamePanel.startGameThread();
     }
 }
