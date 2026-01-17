@@ -71,7 +71,7 @@ public class Player extends Entity{
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
 
             spriteCounter++;
-            if(spriteCounter > 10){ //sprite changes 6x per second while moving
+            if(spriteCounter > 10){ //sprite changes every 10 frames
                 if(spriteNum == 1){
                     spriteNum = 2;
                 }
