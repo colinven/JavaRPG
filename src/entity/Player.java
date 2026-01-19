@@ -24,6 +24,13 @@ public class Player extends Entity{
         screenX = (gp.screenWidth/2) - (gp.tileSize/2);
         screenY = (gp.screenHeight/2) - (gp.tileSize/2);
 
+        //configure player collision box
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32;
+        solidArea.height = 32;
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -32,7 +39,7 @@ public class Player extends Entity{
 
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-        speed = 3;
+        speed = 4;
         direction = "down";
     }
 
@@ -57,24 +64,42 @@ public class Player extends Entity{
 
     public void update() {
 
-        if(keyH.upPressed){
-            worldY -= speed;
-            direction = "up";
-        }
-        else if(keyH.downPressed){
-            worldY += speed;
-            direction = "down";
-        }
-        else if(keyH.rightPressed){
-            worldX += speed;
-            direction = "right";
-        }
-        else if(keyH.leftPressed){
-            worldX -= speed;
-            direction = "left";
-        }
-
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+
+            if(keyH.upPressed){
+                direction = "up";
+            }
+            else if(keyH.downPressed){
+                direction = "down";
+            }
+            else if(keyH.rightPressed){
+                direction = "right";
+            }
+            else if(keyH.leftPressed){
+                direction = "left";
+            }
+
+            //check tile collision
+            collisionOn = false;
+            gp.collisionChecker.checkTile(this);
+
+            //if no collision, player can move
+            if(!collisionOn){
+                switch(direction){
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                }
+            }
 
             spriteCounter++;
             if(spriteCounter > 10){ //sprite changes every 10 frames

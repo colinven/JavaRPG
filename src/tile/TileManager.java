@@ -12,8 +12,8 @@ import java.io.InputStreamReader;
 public class TileManager {
 
     GamePanel gp;
-    Tile[] tile;
-    int[][] mapTileNum;
+    public Tile[] tile;
+    public int[][] mapTileNum;
 
     public TileManager(GamePanel gp) {
 
@@ -34,12 +34,15 @@ public class TileManager {
 
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall-tile.png"));
+            tile[1].collision = true;
 
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water-tile.png"));
+            tile[2].collision = true;
 
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree-tile.png"));
+            tile[3].collision = true;
 
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand-tile.png"));
@@ -47,7 +50,7 @@ public class TileManager {
             tile[5] = new Tile();
             tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/dirt-tile.png"));
 
-            //add additional tile textures here and increase tile.length (line 22) as needed
+            //add additional tile textures here and increase tile array length (line 22) as needed
 
         }catch(IOException e){
             e.printStackTrace();
@@ -94,8 +97,29 @@ public class TileManager {
 
             int tileNum = mapTileNum[worldCol][worldRow];
 
-            int worldX = worldCol * gp.tileSize;
-            int worldY = worldRow * gp.tileSize;
+            int worldX = worldCol * gp.tileSize; // x coordinate of tile on world map
+            int worldY = worldRow * gp.tileSize; // y coordinate of tile on world map
+
+            /*
+            gp.player.world X/Y reference the players location on the MAP.
+            gp.player.screen X/Y reference players location on the SCREEN.
+            in this case, the player location is fixed at x=360 y=264 (middle of the window)
+
+            local screenX and screenY variables reference where on the screen we must render the tile
+
+            by subtracting the players world location from the tiles world location, we can determine the tile's
+            offset from the player. from there we add the player's x/y screen coordinates in order to place that tile
+            correctly relative to the PLAYER.
+
+            for example:
+
+            if the tile is 100px to the right of the player on the world map, where is that on the screen?
+            player.screenX(360) + 100. now the tile is placed correctly in relation to the player.
+
+            we add the player screen location to offset the placement of the tile. otherwise the tile would be
+            placed relative to (0,0).
+
+            */
             int screenX = worldX - gp.player.worldX + gp.player.screenX;
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
